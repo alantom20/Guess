@@ -2,6 +2,7 @@ package com.home.guess
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -28,18 +29,21 @@ class MaterialActivity : AppCompatActivity() {
             replay()
         }
         ConstraintLayout.setText(secretNumber.count.toString())
-        Log.d(TAG, "onCreate: ${secretNumber.secret}")
+        Log.d(TAG, "secretNumber: ${secretNumber.secret}")
         val name = getSharedPreferences("guess", MODE_PRIVATE)
             .getString("REC_NICK",null)
         val count = getSharedPreferences("guess", MODE_PRIVATE)
             .getInt("REC_COUNTER",-1)
         Log.d(TAG, "data : $name / $count")
-        //Room test
-       /* val database = Room.databaseBuilder(this,
-            GameDatabase::class.java, "game.db")
-            .build()
-        val record = Record("JACK",3)
-        database.recordDao().insert(record)*/
+        //Room read test
+        /*AsyncTask.execute {
+            var list = GameDatabase.getInstance(this)?.recordDao()?.getAll()
+            list?.forEach {
+                Log.d(TAG, "onCreate: ${it.nickname} ${it.count}")
+            }
+        }*/
+
+
 
 
     }
