@@ -14,8 +14,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.home.guess.data.EventResult
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.row_function.view.*
+import org.json.JSONArray
+import java.net.URL
 import java.util.zip.Inflater
 
 class MainActivity : AppCompatActivity() {
@@ -27,10 +31,20 @@ class MainActivity : AppCompatActivity() {
             "Guess game",
             "Record list",
             "News",
+            "Snooker",
             "Maps")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Thread{
+            val data = URL("http://api.snooker.org/?t=5&s=2020").readText()
+            val result = Gson().fromJson(data,EventResult :: class.java)
+            result.forEach {
+                Log.d(TAG, "onCreate: $it")
+            }
+        }.start()
+
 
         //RecyclerView
         recycler.layoutManager = LinearLayoutManager(this)
@@ -87,6 +101,7 @@ class MainActivity : AppCompatActivity() {
             1 -> startActivity(Intent(this,MaterialActivity::class.java))
             2 -> startActivity(Intent(this,RecordListActivity::class.java))
             3 -> startActivity(Intent(this,NewsActivity::class.java))
+            4 -> startActivity(Intent(this,SnookerActivity::class.java))
             else -> return
         }
     }
